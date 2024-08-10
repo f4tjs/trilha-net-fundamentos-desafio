@@ -18,8 +18,8 @@ namespace DesafioFundamentos.Models
 
         public void AdicionarVeiculo()
         {
-            // TODO: Pedir para o usuário digitar uma placa (ReadLine) e adicionar na lista "veiculos"
-            // *IMPLEMENTE AQUI*
+            // Pedir para o usuário digitar uma placa (ReadLine) e adicionar na lista "veiculos"
+            // Implementado!
             bool veiculoAdicionado = false;
 
             while (!veiculoAdicionado)
@@ -36,85 +36,98 @@ namespace DesafioFundamentos.Models
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine($"Por favor, informe caracteres válidos. Ex: A-z,0-9...\n");
+                    Console.WriteLine("Por favor, informe caracteres válidos. Ex: A-z,0-9...\n");
                 }
             }
 
         }
 
         public void RemoverVeiculo()
+
         {
-
-            // Verifica se o veículo existe
-            if (veiculos.Any(x => x.ToUpper() == placa.ToUpper()))
+            if (ContarVeiculos() > 0)
             {
+                BaixarVeiculo();
+            }
+            else
+            {
+                Console.WriteLine($"Não existem veículos cadastrados, por favor, cadastre um veículo antes de tentar remover.\n");
+            }
 
-                int horas = 0;
-                decimal valorTotal = 0;
-                bool tempoDePermanenciaColetado = false;
+            int ContarVeiculos()
+            {
+                return Convert.ToInt32(veiculos.Count());
+            }
 
-                // TODO: Realizar o seguinte cálculo: "precoInicial + precoPorHora * horas" para a variável valorTotal   
-                decimal calcularValorPermanecia(decimal preçoInicial, decimal precoPorHora, int horas)
+            // TODO: Remover a placa digitada da lista de veículos
+            bool BaixarVeiculoPorPlaca(string placa)
+            {
+                return veiculos.Remove(placa);
+            }
+
+            // TODO: Realizar o seguinte cálculo: "precoInicial + precoPorHora * horas" para a variável valorTotal   
+            decimal calcularValorPermanecia(decimal preçoInicial, decimal precoPorHora, int horas)
+            {
+                return preçoInicial + (precoPorHora * horas);
+            }
+
+            void BaixarVeiculo()
+            {
+                // Pedir para o usuário digitar a placa e armazenar na variável placa
+                // Implementado!
+                Console.WriteLine("Digite a placa do veículo para remover:\n");
+                string placa = Console.ReadLine().ToString();
+
+                // Verifica se o veículo existe
+                if (veiculos.Any(x => x.ToUpper() == placa.ToUpper()))
                 {
-                    return preçoInicial + (precoPorHora * horas);
-                }
+                    // Remover a placa digitada da lista de veículos.
+                    // Implementado!
+                    if (BaixarVeiculoPorPlaca(placa))
+                    {
 
-                // TODO: Remover a placa digitada da lista de veículos
+                        bool tempoDePermanenciaColetado = false;
+                        int horas;
 
-                void BaixarVeiculoPorPlaca(string placa)
-                {
-                    bool placaRemovida = veiculos.Remove(placa);
-                }
-
-                // TODO: Pedir para o usuário digitar a quantidade de horas que o veículo permaneceu estacionado
-               
-                
-                    while (!tempoDePermanenciaColetado)
+                        while (!tempoDePermanenciaColetado)
+                        {
+                            Console.Clear();
+                            //Pedir para o usuário digitar a quantidade de horas que o veículo permaneceu estacionado.
+                            // Implementado!
+                            Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:\n" +
+                            "Por favor, insira apenas números inteiros positivos, sem casas decimais. Ex: 1, 2, 3 ...\n");
+                            horas = Convert.ToInt32(Console.ReadLine());
+                            if (horas > 0)
+                            {
+                                tempoDePermanenciaColetado = true;
+                                // Realizar o seguinte cálculo: "precoInicial + precoPorHora * horas" para a variável valorTotal
+                                // Implementado!
+                                decimal valorTotal = calcularValorPermanecia(precoInicial, precoPorHora, horas);
+                                Console.Clear();
+                                Console.WriteLine($"\nO veículo: {placa}, foi removido e e o preço total foi de: R$ {valorTotal}.\n");
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Por favor, insira apenas números inteiros positivos, sem casas decimais. Ex: 1, 2, 3 ...\n");
+                            }
+                        }
+                    }
+                    else
                     {
                         Console.Clear();
-                        Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:\n" +
-                        "Favor inserir apenas números inteiros positivos, sem casas decimais. Ex: 0, 1, 2, 3 ...\n");
-                        int tempoPermanencia = Convert.ToInt32(Console.ReadLine());
-
-                        Console.WriteLine($"Por favor, informe caracteres válidos. Ex: A-z,0-9...\n");
-                        if (tempoPermanencia > 0)
-                        {
-                            tempoPermanencia;
-
-                        } else {
-
-                        }
-
-                        
+                        Console.WriteLine($"\nOcorreu um erro ao remover o veículo: {placa}, verifique se o veículo já foi removido ou tente novamente.\n");
                     }
-
-                }
-
-                // Pedir para o usuário digitar a placa e armazenar na variável placa
-                // *IMPLEMENTE AQUI*
-                string placa = null;
-
-                Console.WriteLine("Digite a placa do veículo para remover:\n");
-                placa = Console.ReadLine().ToString();
-                if (!string.IsNullOrWhiteSpace(placa))
-                {
-                    Console.Clear();
-                    TempoDePermanenciaVeiculo();
-
-                    Console.WriteLine($"\nO veículo: {veiculos.Last()}, foi adicionado.\n");
                 }
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine($"Por favor, informe caracteres válidos. Ex: A-z,0-9...\n");
+                    Console.WriteLine($"A placa: {placa} não foi encontrada. Por favor, informe uma placa válida.\n");
+                    RemoverVeiculo();
                 }
 
-                Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
             }
-            else
-            {
-                Console.WriteLine("Desculpe, esse veículo não está estacionado aqui. Confira se digitou a placa corretamente");
-            }
+
         }
 
         public void ListarVeiculos()
@@ -122,9 +135,10 @@ namespace DesafioFundamentos.Models
             // Verifica se há veículos no estacionamento
             if (veiculos.Any())
             {
+                Console.Clear();
                 Console.WriteLine("Os veículos estacionados são:\n");
-                // TODO: Realizar um laço de repetição, exibindo os veículos estacionados
-                // *IMPLEMENTE AQUI*
+                // Realizar um laço de repetição, exibindo os veículos estacionados
+                // Implementado!
                 veiculos.ForEach((veiculo) =>
                 {
                     Console.WriteLine($"- {veiculo}");
